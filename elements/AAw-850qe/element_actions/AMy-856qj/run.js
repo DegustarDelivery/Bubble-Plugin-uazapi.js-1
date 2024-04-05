@@ -33,7 +33,7 @@ function(instance, properties, context) {
 
   
   
-    if(properties.desativadoFluxoAte != null ) leadInfo.desativadoFluxoAte = properties.desativadoFluxoAte;
+  if(properties.desativadoFluxoAte != null ) leadInfo.desativadoFluxoAte = properties.desativadoFluxoAte;
   if(properties.nome) leadInfo.nome = properties.nome.trim();
   if(properties.nomecompleto) leadInfo.nomecompleto = properties.nomecompleto.trim();
   if(properties.email) leadInfo.email = properties.email.trim();
@@ -56,6 +56,8 @@ function(instance, properties, context) {
   };
   
   if(properties.unreadcount != null ) raw.unreadcount = properties.unreadcount;
+    
+  if(properties.muteEndTime != null ) raw.muteEndTime = properties.muteEndTime;
     
   if(properties.delete !== "none" ) raw.delete = properties.delete;
   

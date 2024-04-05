@@ -33,6 +33,7 @@ function(instance, properties, context) {
   var raw = 
   {
     "name": properties.name,
+    "global": String(properties.global),
     "block": JSON.parse(properties.block)
 
    };

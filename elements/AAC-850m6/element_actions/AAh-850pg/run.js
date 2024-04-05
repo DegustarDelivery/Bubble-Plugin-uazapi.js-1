@@ -31,10 +31,10 @@ function(instance, properties, context) {
   
 
   var raw = 
-  {
-    "name": properties.name
-
-   };
+        {
+          "name": properties.name,
+          "global": String(properties.global),
+        };
 
   
 

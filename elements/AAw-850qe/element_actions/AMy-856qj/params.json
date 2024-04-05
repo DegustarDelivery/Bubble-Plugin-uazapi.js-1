@@ -41,7 +41,7 @@
             "name": "desativadoFluxoAte",
             "optional": true,
             "options": "",
-            "rank": 7,
+            "rank": 8,
             "value": "number"
         },
         "AMO": {
@@ -50,7 +50,7 @@
             "editor": "Label",
             "name": "info",
             "options": "",
-            "rank": 5,
+            "rank": 6,
             "value": "text"
         },
         "AMP": {
@@ -60,7 +60,7 @@
             "name": "nome",
             "optional": true,
             "options": "",
-            "rank": 10,
+            "rank": 11,
             "value": "text"
         },
         "AMQ": {
@@ -70,7 +70,7 @@
             "name": "email",
             "optional": true,
             "options": "",
-            "rank": 12,
+            "rank": 13,
             "value": "text"
         },
         "AMR": {
@@ -80,7 +80,7 @@
             "name": "nomecompleto",
             "optional": true,
             "options": "",
-            "rank": 11,
+            "rank": 12,
             "value": "text"
         },
         "AMS": {
@@ -90,7 +90,7 @@
             "name": "cpf",
             "optional": true,
             "options": "",
-            "rank": 13,
+            "rank": 14,
             "value": "text"
         },
         "ANB": {
@@ -99,7 +99,7 @@
             "editor": "DynamicValue",
             "name": "status",
             "optional": true,
-            "rank": 14,
+            "rank": 15,
             "value": "text"
         },
         "ANC": {
@@ -109,7 +109,7 @@
             "long_text": true,
             "name": "notas",
             "optional": true,
-            "rank": 15,
+            "rank": 16,
             "value": "text"
         },
         "AND": {
@@ -118,7 +118,7 @@
             "editor": "DynamicValue",
             "name": "tags",
             "optional": true,
-            "rank": 17,
+            "rank": 18,
             "value": "text"
         },
         "ANE": {
@@ -128,7 +128,7 @@
             "editor": "DynamicValue",
             "name": "atendimentoAberto",
             "optional": true,
-            "rank": 8,
+            "rank": 9,
             "value": "boolean"
         },
         "ANF": {
@@ -137,7 +137,7 @@
             "editor": "DynamicValue",
             "name": "responsavelid",
             "optional": true,
-            "rank": 20,
+            "rank": 21,
             "value": "text"
         },
         "ANG": {
@@ -147,7 +147,7 @@
             "editor": "DynamicValue",
             "name": "editTags",
             "optional": false,
-            "rank": 16,
+            "rank": 17,
             "value": "boolean"
         },
         "ANK": {
@@ -164,7 +164,7 @@
             "editor": "DynamicValue",
             "name": "unreadcount",
             "optional": true,
-            "rank": 21,
+            "rank": 22,
             "value": "number"
         },
         "ANb": {
@@ -174,14 +174,14 @@
             "editor": "DynamicValue",
             "name": "customFields",
             "optional": true,
-            "rank": 22,
+            "rank": 23,
             "value": "text"
         },
         "ANd": {
             "caption": "Não esqueça de colocar no campo acima o \"_id\" = ao \"_id\" definido na ação de editar campos personalizados, em caso de dúvidas veja no editor exemplo ou fale com o suporte.",
             "editor": "Label",
             "name": "info",
-            "rank": 23
+            "rank": 24
         },
         "AQC": {
             "caption": "Etiquetas",
@@ -189,7 +189,7 @@
             "editor": "DynamicValue",
             "name": "etiquetas",
             "optional": true,
-            "rank": 19,
+            "rank": 20,
             "value": "text"
         },
         "AQD": {
@@ -198,14 +198,14 @@
             "doc": "Passe como verdadeiro para editar as etiquetas, passando o conjunto de etiquetas na campo abaixo",
             "editor": "DynamicValue",
             "name": "editEtiquetas",
-            "rank": 18,
+            "rank": 19,
             "value": "boolean"
         },
         "AQF": {
             "caption": "São opcionais, para editar algum campo abaixo, você precisa passar algum valor, caso queira apagar um valor de um campo, passe o valor com um espaço. Os únicos que não tem essa regra são os campos de Tags, de Etiquetas, e Atendimento Aberto.",
             "editor": "Label",
             "name": "info",
-            "rank": 9
+            "rank": 10
         },
         "ARE": {
             "caption": "delete",
@@ -214,7 +214,16 @@
             "editor": "Dropdown",
             "name": "delete",
             "options": "none,all,messages",
-            "rank": 6
+            "rank": 7
+        },
+        "ARI": {
+            "caption": "Notificações",
+            "doc": "Para habilitar notificações selecione 0, e para remover selecione -1 (um negativo), deixe vazio para não atualizar nada",
+            "editor": "DynamicValue",
+            "name": "muteEndTime",
+            "optional": true,
+            "rank": 5,
+            "value": "number"
         }
     }
 }

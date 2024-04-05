@@ -41,8 +41,17 @@
             "caption": "Editar variável",
             "editor": "DynamicValue",
             "name": "variable",
-            "rank": 5,
+            "rank": 6,
             "value": "text"
+        },
+        "ARP": {
+            "caption": "global",
+            "default_val": false,
+            "doc": "Se for global, você precisa usar apikey global. OBS: Fluxos globais foram criados para serem visualizados e sincronizados entre outras instâncias, usando a apikey global como controle de quem pode editar.",
+            "editor": "DynamicValue",
+            "name": "global",
+            "rank": 5,
+            "value": "boolean"
         }
     }
 }

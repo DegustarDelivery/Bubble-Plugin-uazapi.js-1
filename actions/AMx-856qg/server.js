@@ -66,7 +66,7 @@ async function(properties, context) {
 
 if(properties.unreadcount != null ) raw.unreadcount = properties.unreadcount;
 if(properties.delete !== "none" ) raw.delete = properties.delete;
-   
+if(properties.muteEndTime != null ) raw.muteEndTime = properties.muteEndTime;   
  
 
     // Adicionando ou removendo 'tags' em 'leadInfo' com base em 'editTags'

@@ -33,6 +33,7 @@ function(instance, properties, context) {
   var raw = 
   {
     "name": properties.name,
+    "global": String(properties.global),
     "group": {
     	"_id": properties._id,
     	"delete": properties.delete,

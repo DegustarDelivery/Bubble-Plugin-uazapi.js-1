@@ -42,14 +42,14 @@
             "editor": "DynamicValue",
             "long_text": false,
             "name": "_id",
-            "rank": 5,
+            "rank": 6,
             "value": "text"
         },
         "ABE": {
             "caption": "Nome do grupo",
             "editor": "DynamicValue",
             "name": "title",
-            "rank": 6,
+            "rank": 7,
             "value": "text"
         },
         "ABF": {
@@ -57,7 +57,7 @@
             "default_val": 1,
             "editor": "DynamicValue",
             "name": "x",
-            "rank": 7,
+            "rank": 8,
             "value": "number"
         },
         "ABG": {
@@ -65,7 +65,7 @@
             "default_val": 1,
             "editor": "DynamicValue",
             "name": "y",
-            "rank": 8,
+            "rank": 9,
             "value": "number"
         },
         "ABH": {
@@ -73,7 +73,16 @@
             "default_val": false,
             "editor": "DynamicValue",
             "name": "delete",
-            "rank": 9,
+            "rank": 10,
+            "value": "boolean"
+        },
+        "ARO": {
+            "caption": "global",
+            "default_val": false,
+            "doc": "Se for global, você precisa usar apikey global. OBS: Fluxos globais foram criados para serem visualizados e sincronizados entre outras instâncias, usando a apikey global como controle de quem pode editar.",
+            "editor": "DynamicValue",
+            "name": "global",
+            "rank": 5,
             "value": "boolean"
         }
     }

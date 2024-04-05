@@ -33,7 +33,8 @@ function(instance, properties, context) {
   var raw = 
   {
     "name": properties.name,
-    "varedit": JSON.parse(properties.varedit)
+    "global": String(properties.global),
+    "varedit": JSON.parse(properties.varedit),
 
    };
 
