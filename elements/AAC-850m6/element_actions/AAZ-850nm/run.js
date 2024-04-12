@@ -44,6 +44,11 @@ try {
   if (properties.name && properties.name.trim() !== "") {
     raw.name = properties.name;
   }
+    
+  // Adiciona 'global' a raw, convertendo para string.
+  if (properties.global !== undefined) {
+  	raw.global = String(properties.global);
+  }
 
 } catch (e) {
   console.error("O valor de 'import' não é um JSON válido:", e);

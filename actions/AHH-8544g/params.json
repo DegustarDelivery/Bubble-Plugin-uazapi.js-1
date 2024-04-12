@@ -20,6 +20,7 @@
         },
         "AGi": {
             "caption": "mensagens",
+            "doc": "Selecione: 📄Mensanges",
             "editor": "custom_type",
             "name": "mensagens",
             "rank": 7

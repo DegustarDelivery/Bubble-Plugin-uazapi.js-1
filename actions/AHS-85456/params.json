@@ -1,6 +1,6 @@
 {
     "category": "plugins",
-    "display": "▶️ Grupo - Mudar nome",
+    "display": "▶️ Grupo - Mudar nome [use a função \"▶️ Grupo - Editar configurações]",
     "fields": {
         "AGc": {
             "caption": "Servidor URL",

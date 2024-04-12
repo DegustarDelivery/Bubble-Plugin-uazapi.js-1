@@ -40,6 +40,7 @@
         },
         "AHw": {
             "caption": "Destinatário",
+            "doc": "",
             "editor": "DynamicValue",
             "name": "number",
             "rank": 5,
@@ -48,6 +49,7 @@
         "AHy": {
             "caption": "delay",
             "default_val": 0,
+            "doc": "Tempo que aparecerá \"Digitando...\" em milisefundos, 1000 = 1 segundo",
             "editor": "DynamicValue",
             "name": "delay",
             "rank": 8,
@@ -62,6 +64,7 @@
         },
         "AIJ": {
             "caption": "Telefone",
+            "doc": "Você pode enviar mais de um telefone, separando por |",
             "editor": "DynamicValue",
             "name": "wuid",
             "rank": 7,

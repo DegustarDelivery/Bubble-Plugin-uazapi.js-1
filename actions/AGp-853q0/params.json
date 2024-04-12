@@ -20,6 +20,7 @@
         },
         "AGi": {
             "caption": "Instancia",
+            "doc": "Selecione: 📄Instancia Detalhe",
             "editor": "custom_type",
             "name": "instancia",
             "rank": 5

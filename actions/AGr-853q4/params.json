@@ -40,6 +40,7 @@
         },
         "AHY": {
             "caption": "Webhook Status",
+            "doc": "Selecione: 📄Webhook Statu",
             "editor": "custom_type",
             "name": "webhook_status",
             "rank": 5

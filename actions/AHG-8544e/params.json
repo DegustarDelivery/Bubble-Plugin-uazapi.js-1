@@ -20,6 +20,7 @@
         },
         "AGi": {
             "caption": "contatos",
+            "doc": "Selecione: 📄 Contatos",
             "editor": "custom_type",
             "name": "contatos",
             "rank": 5

@@ -1,6 +1,6 @@
 {
     "category": "plugins",
-    "display": "▶️ Grupo - Mudar imagem",
+    "display": "▶️ Grupo - Mudar imagem [use a função \"▶️ Grupo - Editar configurações]",
     "fields": {
         "AGc": {
             "caption": "Servidor URL",

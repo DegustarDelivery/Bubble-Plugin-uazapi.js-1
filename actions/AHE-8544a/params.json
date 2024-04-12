@@ -48,6 +48,7 @@
         },
         "AJm": {
             "caption": "numeros",
+            "doc": "Selecione: 📄Verificar números",
             "editor": "custom_type",
             "name": "numeros",
             "rank": 6

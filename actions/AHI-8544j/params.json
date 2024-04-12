@@ -20,6 +20,7 @@
         },
         "AGi": {
             "caption": "chats",
+            "doc": "Selecione: 📄Chats",
             "editor": "custom_type",
             "name": "chats",
             "rank": 5

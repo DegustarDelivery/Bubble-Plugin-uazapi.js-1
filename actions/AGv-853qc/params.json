@@ -48,6 +48,7 @@
         "AHy": {
             "caption": "delay",
             "default_val": 0,
+            "doc": "Tempo que aparecerá \"Digitando...\" em milisefundos, 1000 = 1 segundo",
             "editor": "DynamicValue",
             "name": "delay",
             "rank": 11,
