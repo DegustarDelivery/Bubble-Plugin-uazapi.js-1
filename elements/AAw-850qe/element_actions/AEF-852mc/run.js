@@ -1,5 +1,5 @@
 function(instance, properties, context) {
-    //🔓 Grupo - Detalhes
+    //⚡ Grupo - Detalhes
     let baseUrl = properties.url;
     if (!baseUrl || baseUrl.trim() === "" || !baseUrl.includes("http")) {
         baseUrl = context.keys["Server URL"];

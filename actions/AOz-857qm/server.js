@@ -1,5 +1,5 @@
 async function(properties, context) {
-    //🔓Enviar Digitando... / Gravando...
+    //⚡Enviar Digitando... / Gravando...
 
     let baseUrl = properties.url;
     if (!baseUrl || baseUrl.trim() === "" || !baseUrl.includes("http")) {

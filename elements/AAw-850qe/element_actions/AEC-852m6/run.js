@@ -1,5 +1,5 @@
 function(instance, properties, context) {
-    // 🔓 Mensagem - Marcar como lida
+    // ⚡ Mensagem - Marcar como lida
     let baseUrl = properties.url;
     if (!baseUrl || baseUrl.trim() === "" || !baseUrl.includes("http")) {
         baseUrl = context.keys["Server URL"];

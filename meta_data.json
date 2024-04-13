@@ -4,7 +4,7 @@
         "1": "technical"
     },
     "demo_page": "",
-    "description": "Não consome WU. \n\nAcesse nosso site e teste grátis.\n\nhttps://uazapi.dev/\n\nPlugin para uazapi - API WhatsApp.\n\nA melhor API para WhatsApp, muito simples de usar, veja nosso editor exemplo para saber como funciona todas as chamadas.\n\n\n\nLegenda:\n\n\n▶️ > Server Side - as chamadas vão ser feitas no servidor do Bubble, nenhum dado estará disponível para o cliente / navegador.\n\n\n🔓  > Client Side - as chamadas vão ser feitas no cliente, no seu navegador.\n\nVantagens:\n1- A resposta será mais rápida,\n2- Não consumirá Work Unit,\n\nDesvantagem:\nToda a informação da chamada API estará disponível no navegador do usuário, use apenas quando essa informação não for sigilosa.",
+    "description": "Não consome WU. \n\nAcesse nosso site e teste grátis.\n\nhttps://uazapi.dev/\n\nPlugin para uazapi - API WhatsApp.\n\nA melhor API para WhatsApp, muito simples de usar, veja nosso editor exemplo para saber como funciona todas as chamadas.\n\n\n\nLegenda:\n\n\n▶️ > Server Side - as chamadas vão ser feitas no servidor do Bubble, nenhum dado estará disponível para o cliente / navegador.\n\n\n⚡  > Client Side - as chamadas vão ser feitas no cliente, no seu navegador.\n\nVantagens:\n1- A resposta será mais rápida,\n2- Não consumirá Work Unit,\n\nDesvantagem:\nToda a informação da chamada API estará disponível no navegador do usuário, use apenas quando essa informação não for sigilosa.",
     "image": "//meta-l.cdn.bubble.io/f1687877424297x152106290190667800/uazap%20i%20%2815%29round.png",
     "license": "open_source",
     "link": "http://uazapi.dev/",

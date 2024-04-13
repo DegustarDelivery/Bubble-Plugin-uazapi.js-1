@@ -1,5 +1,5 @@
 function(instance, properties, context) {
-  //🔓Buscar etiquetas
+  //⚡Buscar etiquetas
 
   let baseUrl = properties.url;
   if (!baseUrl || baseUrl.trim() === "" || !baseUrl.includes("http")) {

@@ -1,5 +1,5 @@
 function(instance, properties, context) {
-    //🔓Arquivar Conversa
+    //⚡Arquivar Conversa
 
   let baseUrl = properties.url;
   if (!baseUrl || baseUrl.trim() === "" || !baseUrl.includes("http")) {
