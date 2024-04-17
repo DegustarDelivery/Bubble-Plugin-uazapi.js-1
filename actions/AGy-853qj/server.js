@@ -51,9 +51,9 @@ async function(properties, context) {
         }
     };
 
-    let retries = 3;
+   let retries = 3;
     let attempt = 0;
-    let response, resultObj;
+    let response, resultObj, error = false, error_log;
 
     while (attempt < retries) {
         try {
@@ -63,37 +63,49 @@ async function(properties, context) {
                 body: JSON.stringify(raw)
             });
 
-            resultObj = await response.json(); // Assume we always get JSON back
-            let isError = response.status >= 400;
-
-            return {
-                remoteJid: resultObj.key?.remoteJid,
-                fromMe: resultObj.key?.fromMe,
-                id: resultObj.key?.id,
-                status: resultObj.status?.toString(),
-                error: isError,
-                log: JSON.stringify(resultObj, null, 2).replace(/"_p_/g, "\""),
-                error_log: isError ? JSON.stringify(resultObj, null, 2).replace(/"_p_/g, "\"") : null
-            };
-            
+            if (response.ok) {
+                resultObj = await response.json();
+                return {
+                    remoteJid: resultObj?.key?.remoteJid,
+                    fromMe: resultObj?.key?.fromMe,
+                    id: resultObj?.key?.id,
+                    status: resultObj?.status ? resultObj?.status.toString() : undefined,
+                    error: false,
+                    log: JSON.stringify(resultObj, null, 2).replace(/"_p_/g, "\""),
+                    error_log: null
+                };
+            } else {
+                error = true;
+                const responseBody = await response.json();
+                error_log = JSON.stringify(responseBody, null, 2).replace(/"_p_/g, "\"");
+                if (attempt === retries - 1) {
+                    return {
+                        error: error,
+                        error_log: error_log
+                    };
+                }
+            }
         } catch (e) {
             console.log(`Error on attempt ${attempt + 1}: ${e.message}`);
-            if (attempt < retries - 1 && e.message.includes("fetch failed")) {
-                console.log("Retrying fetch...");
-                attempt++;
-                await new Promise(resolve => setTimeout(resolve, 1000 * (attempt + 1)));
-                continue;
+            error = true;
+            error_log = e.toString();
+            if (!e.message.toLowerCase().includes("fetch failed") || attempt === retries - 1) {
+                return {
+                    error: error,
+                    error_log: error_log
+                };
             }
-            return {
-                error: true,
-                error_log: `Error: ${e.message}`
-            };
         }
+
+        attempt++;
+        console.log("Retrying fetch...");
+        await new Promise(resolve => setTimeout(resolve, 1000 * attempt));
     }
 
     return {
-        error: true,
+        error: error,
         error_log: "Failed after all retries."
     };
-}}
+}
+}
 
