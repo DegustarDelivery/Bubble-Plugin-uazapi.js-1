@@ -71,36 +71,43 @@ async function(properties, context) {
                 body: JSON.stringify(raw)
             });
 
-            resultObj = await response.json(); // Assume we always get JSON back
-            let isError = response.status >= 400;
-
-            return {
-                remoteJid: resultObj.key?.remoteJid,
-                fromMe: resultObj.key?.fromMe,
-                id: resultObj.key?.id,
-                status: resultObj.status?.toString(),
-                error: isError,
-                log: JSON.stringify(resultObj, null, 2).replace(/"_p_/g, "\""),
-                error_log: isError ? JSON.stringify(resultObj, null, 2).replace(/"_p_/g, "\"") : null
-            };
-            
+            if (response.ok) {
+                resultObj = await response.json();
+                return {
+                    remoteJid: resultObj.key?.remoteJid,
+                    fromMe: resultObj.key?.fromMe,
+                    id: resultObj.key?.id,
+                    status: resultObj.status?.toString(),
+                    error: false,
+                    log: JSON.stringify(resultObj, null, 2).replace(/"_p_/g, "\"")
+                };
+            } else {
+                const errorResponse = await response.json();
+                let errorLog = JSON.stringify(errorResponse, null, 2).replace(/"_p_/g, "\"");
+                if (response.status >= 400) {
+                    return { // Return immediately if it's a client or server error
+                        error: true,
+                        error_log: errorLog
+                    };
+                }
+                throw new Error(`HTTP status ${response.status}: ${errorLog}`);
+            }
         } catch (e) {
             console.log(`Error on attempt ${attempt + 1}: ${e.message}`);
-            if (attempt < retries - 1 && e.message.includes("fetch failed")) {
+            if (e.message.includes("fetch failed") && attempt < retries - 1) {
                 console.log("Retrying fetch...");
                 attempt++;
-                await new Promise(resolve => setTimeout(resolve, 1000 * (attempt + 1)));
-                continue;
+            } else {
+                return { // Return the last caught error if it's not a fetch fail or retries are exhausted
+                    error: true,
+                    error_log: `Error: ${e.message}`
+                };
             }
-            return {
-                error: true,
-                error_log: `Error: ${e.message}`
-            };
         }
     }
 
-    return {
+    return { // Default return if all retries fail
         error: true,
         error_log: "Failed after all retries."
     };
-}}
+}
