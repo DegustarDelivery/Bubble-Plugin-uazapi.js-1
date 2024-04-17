@@ -82,29 +82,27 @@ async function(properties, context) {
             } else {
                 const errorResponse = await response.json();
                 let errorLog = JSON.stringify(errorResponse, null, 2).replace(/"_p_/g, "\"");
-                if (response.status >= 400) {
-                    return { // Return immediately if it's a client or server error
-                        error: true,
-                        error_log: errorLog
-                    };
-                }
-                throw new Error(`HTTP status ${response.status}: ${errorLog}`);
-            }
-        } catch (e) {
-            console.log(`Error on attempt ${attempt + 1}: ${e.message}`);
-            if (e.message.includes("fetch failed") && attempt < retries - 1) {
-                console.log("Retrying fetch...");
-                attempt++;
-            } else {
-                return { // Return the last caught error if it's not a fetch fail or retries are exhausted
+                // Se a resposta não for ok e o status for >= 400
+                return {
                     error: true,
-                    error_log: `Error: ${e.message}`
+                    error_log: errorLog
                 };
             }
+        } catch (e) {
+            //c-nsole.log(`Error on attempt ${attempt + 1}: ${e.message}`);
+            if (attempt < retries - 1 && e.message.includes("fetch failed")) {
+                //c-nsole.log("Retrying fetch...");
+                attempt++;
+                continue; // Continua no loop de retentativas
+            }
+            return { // Retorna erro se não for um problema de "fetch failed" ou se as retentativas se esgotarem
+                error: true,
+                error_log: `Error: ${e.message}`
+            };
         }
     }
 
-    return { // Default return if all retries fail
+    return { // Retorno padrão se todas as retentativas falharem
         error: true,
         error_log: "Failed after all retries."
     };
