@@ -105,7 +105,7 @@ send = "https:" + properties.audio;
 
         attempt++;
         console.log("Retrying fetch...");
-        await new Promise(resolve => setTimeout(resolve, 1000 * attempt));
+        //await new Promise(resolve => setTimeout(resolve, 1000 * attempt));
     }
 
     return {
