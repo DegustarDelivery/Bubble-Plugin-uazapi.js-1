@@ -50,7 +50,7 @@ async function(properties, context) {
         }
     };
 
-   let retries = 3;
+       let retries = 3;
     let attempt = 0;
     let response, resultObj, error = false, error_log;
 
@@ -62,35 +62,39 @@ async function(properties, context) {
                 body: JSON.stringify(raw)
             });
 
-            if (response.ok) {
-                resultObj = await response.json();
+            let responseBody;
+            try {
+                responseBody = await response.json();
+            } catch (e) {
+                responseBody = null;
+                error_log = "Failed to parse JSON response";
+            }
+
+            if (response.ok && responseBody) {
                 return {
-                    remoteJid: resultObj?.key?.remoteJid,
-                    fromMe: resultObj?.key?.fromMe,
-                    id: resultObj?.key?.id,
-                    status: resultObj?.status ? resultObj?.status.toString() : undefined,
+                    remoteJid: responseBody.key?.remoteJid,
+                    fromMe: responseBody.key?.fromMe,
+                    id: responseBody.key?.id,
+                    status: responseBody.status ? responseBody.status.toString() : undefined,
                     error: false,
-                    log: JSON.stringify(resultObj, null, 2).replace(/"_p_/g, "\""),
+                    log: JSON.stringify(responseBody, null, 2).replace(/"_p_/g, "\""),
                     error_log: null
                 };
-            } else {
-                error = true;
-                const responseBody = await response.json();
+            } else if (!response.ok && responseBody) {
                 error_log = JSON.stringify(responseBody, null, 2).replace(/"_p_/g, "\"");
-                if (attempt === retries - 1) {
-                    return {
-                        error: error,
-                        error_log: error_log
-                    };
-                }
+                return {
+                    error: true,
+                    error_log: error_log
+                };
+            } else {
+                throw new Error(`HTTP status ${response.status}: ${error_log}`);
             }
         } catch (e) {
             console.log(`Error on attempt ${attempt + 1}: ${e.message}`);
-            error = true;
-            error_log = e.toString();
-            if (!e.message.toLowerCase().includes("fetch failed") || attempt === retries - 1) {
+            error_log = `Error: ${e.message}`;
+            if (attempt >= retries - 1 || !e.message.toLowerCase().includes("fetch failed")) {
                 return {
-                    error: error,
+                    error: true,
                     error_log: error_log
                 };
             }
@@ -102,7 +106,7 @@ async function(properties, context) {
     }
 
     return {
-        error: error,
+        error: true,
         error_log: "Failed after all retries."
     };
 }
