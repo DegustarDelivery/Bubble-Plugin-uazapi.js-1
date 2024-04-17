@@ -69,40 +69,35 @@ async function(properties, context) {
                 body: JSON.stringify(raw)
             });
 
-            if (response.ok) {
-                resultObj = await response.json();
-                return {
-                    remoteJid: resultObj.key?.remoteJid,
-                    fromMe: resultObj.key?.fromMe,
-                    id: resultObj.key?.id,
-                    status: resultObj.status?.toString(),
-                    error: false,
-                    log: JSON.stringify(resultObj, null, 2).replace(/"_p_/g, "\"")
-                };
-            } else {
-                const errorResponse = await response.json();
-                let errorLog = JSON.stringify(errorResponse, null, 2).replace(/"_p_/g, "\"");
-                // Se a resposta não for ok e o status for >= 400
-                return {
-                    error: true,
-                    error_log: errorLog
-                };
-            }
+            resultObj = await response.json(); // Assume we always get JSON back
+            let isError = response.status >= 400;
+
+            return {
+                remoteJid: resultObj.key?.remoteJid,
+                fromMe: resultObj.key?.fromMe,
+                id: resultObj.key?.id,
+                status: resultObj.status?.toString(),
+                error: isError,
+                log: JSON.stringify(resultObj, null, 2).replace(/"_p_/g, "\""),
+                error_log: isError ? JSON.stringify(resultObj, null, 2).replace(/"_p_/g, "\"") : null
+            };
+            
         } catch (e) {
-            //c-nsole.log(`Error on attempt ${attempt + 1}: ${e.message}`);
+            console.log(`Error on attempt ${attempt + 1}: ${e.message}`);
             if (attempt < retries - 1 && e.message.includes("fetch failed")) {
-                //c-nsole.log("Retrying fetch...");
+                console.log("Retrying fetch...");
                 attempt++;
-                continue; // Continua no loop de retentativas
+                await new Promise(resolve => setTimeout(resolve, 1000 * (attempt + 1)));
+                continue;
             }
-            return { // Retorna erro se não for um problema de "fetch failed" ou se as retentativas se esgotarem
+            return {
                 error: true,
                 error_log: `Error: ${e.message}`
             };
         }
     }
 
-    return { // Retorno padrão se todas as retentativas falharem
+    return {
         error: true,
         error_log: "Failed after all retries."
     };
