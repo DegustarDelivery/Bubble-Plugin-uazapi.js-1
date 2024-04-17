@@ -59,7 +59,7 @@ async function(properties, context) {
 
     let retries = 3;
     let attempt = 0;
-    let response, resultObj;
+    let response;
 
     while (attempt < retries) {
         try {
@@ -70,7 +70,7 @@ async function(properties, context) {
             });
 
             if (response.ok) {
-                resultObj = await response.json();
+                let resultObj = await response.json();
                 return {
                     remoteJid: resultObj.key?.remoteJid,
                     fromMe: resultObj.key?.fromMe,
@@ -80,32 +80,20 @@ async function(properties, context) {
                     log: JSON.stringify(resultObj, null, 2).replace(/"_p_/g, "\"")
                 };
             } else {
-                const errorResponse = await response.json();
-                let errorLog = JSON.stringify(errorResponse, null, 2).replace(/"_p_/g, "\"");
-                if (response.status >= 400) {
-                    return { // Return immediately if it's a client or server error
-                        error: true,
-                        error_log: errorLog
-                    };
-                }
-                throw new Error(`HTTP status ${response.status}: ${errorLog}`);
+                throw new Error("HTTP status " + response.status);
             }
         } catch (e) {
             console.log(`Error on attempt ${attempt + 1}: ${e.message}`);
             if (e.message.includes("fetch failed") && attempt < retries - 1) {
                 console.log("Retrying fetch...");
                 attempt++;
+                continue;
             } else {
-                return { // Return the last caught error if it's not a fetch fail or retries are exhausted
+                return {
                     error: true,
                     error_log: `Error: ${e.message}`
                 };
             }
         }
     }
-
-    return { // Default return if all retries fail
-        error: true,
-        error_log: "Failed after all retries."
-    };
 }
