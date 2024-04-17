@@ -53,38 +53,55 @@ send = "https:" + properties.image;
         }
     };
     
+    let retries = 3;
+    let attempt = 0;
     let response, resultObj;
-    let error = false;
-    let error_log;
 
-    try {
-        response = await fetch(url, {
-            method: 'POST',
-            headers: headers,
-            body: JSON.stringify(body)
-        });
-        resultObj = await response.json();
-    } catch(e) {
-        error = true;
-        error_log = e.toString();
+    while (attempt < retries) {
+        try {
+            response = await fetch(url, {
+                method: 'POST',
+                headers: headers,
+                body: JSON.stringify(raw)
+            });
+
+            if (response.ok) {
+                resultObj = await response.json();
+                return {
+                    remoteJid: resultObj.key?.remoteJid,
+                    fromMe: resultObj.key?.fromMe,
+                    id: resultObj.key?.id,
+                    status: resultObj.status?.toString(),
+                    error: false,
+                    log: JSON.stringify(resultObj, null, 2).replace(/"_p_/g, "\"")
+                };
+            } else {
+                const errorResponse = await response.json();
+                let errorLog = JSON.stringify(errorResponse, null, 2).replace(/"_p_/g, "\"");
+                if (response.status >= 400) {
+                    return { // Return immediately if it's a client or server error
+                        error: true,
+                        error_log: errorLog
+                    };
+                }
+                throw new Error(`HTTP status ${response.status}: ${errorLog}`);
+            }
+        } catch (e) {
+            console.log(`Error on attempt ${attempt + 1}: ${e.message}`);
+            if (e.message.includes("fetch failed") && attempt < retries - 1) {
+                console.log("Retrying fetch...");
+                attempt++;
+            } else {
+                return { // Return the last caught error if it's not a fetch fail or retries are exhausted
+                    error: true,
+                    error_log: `Error: ${e.message}`
+                };
+            }
+        }
     }
 
-    if (!response.ok) {
-        error = true;
-        return {
-            error: error,
-            error_log: JSON.stringify(resultObj, null, 2).replace(/"_p_/g, "\""),
-        };
-    } 
-
-    return {
-        remoteJid: resultObj?.key?.remoteJid,
-        fromMe: resultObj?.key?.fromMe,
-        id: resultObj?.key?.id,
-        status: resultObj?.status ? resultObj?.status.toString() : undefined,
-        error: error,
-        log: JSON.stringify(resultObj, null, 2).replace(/"_p_/g, "\""),
-        error_log: error_log,
+    return { // Default return if all retries fail
+        error: true,
+        error_log: "Failed after all retries."
     };
 }
-

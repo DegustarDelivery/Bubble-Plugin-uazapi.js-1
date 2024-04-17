@@ -57,50 +57,55 @@ async function(properties, context) {
         raw.options.quoted = { key: { id: properties.quoted.trim() } };
     }
 
-    let response;
-    let error = false;
-    let error_log;
+    let retries = 3;
+    let attempt = 0;
+    let response, resultObj;
 
-    try {
-        response = await fetch(url, {
-            method: 'POST',
-            headers: headers,
-            body: JSON.stringify(raw)
-        });
+    while (attempt < retries) {
+        try {
+            response = await fetch(url, {
+                method: 'POST',
+                headers: headers,
+                body: JSON.stringify(raw)
+            });
 
-        if (!response.ok) {
-            error = true;
-            const responseBody = await response.json();
-            return {
-                error: error,
-                error_log: JSON.stringify(responseBody, null, 2).replace(/"_p_/g, "\"")
-            };
+            if (response.ok) {
+                resultObj = await response.json();
+                return {
+                    remoteJid: resultObj.key?.remoteJid,
+                    fromMe: resultObj.key?.fromMe,
+                    id: resultObj.key?.id,
+                    status: resultObj.status?.toString(),
+                    error: false,
+                    log: JSON.stringify(resultObj, null, 2).replace(/"_p_/g, "\"")
+                };
+            } else {
+                const errorResponse = await response.json();
+                let errorLog = JSON.stringify(errorResponse, null, 2).replace(/"_p_/g, "\"");
+                if (response.status >= 400) {
+                    return { // Return immediately if it's a client or server error
+                        error: true,
+                        error_log: errorLog
+                    };
+                }
+                throw new Error(`HTTP status ${response.status}: ${errorLog}`);
+            }
+        } catch (e) {
+            console.log(`Error on attempt ${attempt + 1}: ${e.message}`);
+            if (e.message.includes("fetch failed") && attempt < retries - 1) {
+                console.log("Retrying fetch...");
+                attempt++;
+            } else {
+                return { // Return the last caught error if it's not a fetch fail or retries are exhausted
+                    error: true,
+                    error_log: `Error: ${e.message}`
+                };
+            }
         }
-
-    } catch (e) {
-        error = true;
-        error_log = `Error: ${e.message}`;
-        console.log(e); // Log detalhado do erro ajustado, se funcionar, replicar para outras funções
-        return {
-            error: error,
-            error_log: error_log
-        };
     }
 
-    // Verificar se a resposta não é nula antes de tentar ler o JSON
-    let resultObj;
-    if (response) {
-        resultObj = await response.json();
-    }
-
-    // Verificar se resultObj não é nulo antes de acessar suas propriedades
-    return {
-        remoteJid: resultObj && resultObj.key ? resultObj.key.remoteJid : undefined,
-        fromMe: resultObj && resultObj.key ? resultObj.key.fromMe : undefined,
-        id: resultObj && resultObj.key ? resultObj.key.id : undefined,
-        status: resultObj && resultObj.status ? resultObj.status.toString() : undefined,
-        error: error,
-        log: resultObj ? JSON.stringify(resultObj, null, 2).replace(/"_p_/g, "\"") : undefined,
-        error_log: error_log
+    return { // Default return if all retries fail
+        error: true,
+        error_log: "Failed after all retries."
     };
 }
