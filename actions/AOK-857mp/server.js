@@ -1,6 +1,4 @@
 async function(properties, context) {
-
-let axios = require('axios');
     //▶️ Configuração Geral dos Fluxos
     
     let baseUrl = properties.url;
@@ -47,41 +45,34 @@ let axios = require('axios');
         "stopWhenYouSendMsg": properties.stopWhenYouSendMsg,
     };
 
-    let response, response.data;
+    let response, resultObj;
     let error = false;
     let error_log;
 
     try {
-            response = await axios({
-            url: url,
-            method: 'post',
+        response = await fetch(url, {
+            method: 'POST',
             headers: headers,
-            body: raw
+            body: JSON.stringify(raw)
         });
-        
+        resultObj = await response.json();
+    } catch(e) {
+        error = true;
+        error_log = e.toString();
+    }
 
-
-    if (response.status !== 200) {
+    if (!response.ok) {
         error = true;
         return {
             error: error,
-            error_log: JSON.stringify(response.data, null, 2).replace(/"_p_/g, "\""),
+            error_log: JSON.stringify(resultObj, null, 2).replace(/"_p_/g, "\""),
         };
     }
 
-} catch (e) {
-    error = true;
-    error_log = e.toString();
     return {
+        ticketSystem: resultObj,
         error: error,
-        error_log: error_log
-    };
-}
-
-    return {
-        ticketSystem: response.data,
-        error: error,
-        log: JSON.stringify(response.data, null, 2).replace(/"_p_/g, "\""),
+        log: JSON.stringify(resultObj, null, 2).replace(/"_p_/g, "\""),
         error_log: error_log
     };
 }

@@ -1,6 +1,4 @@
 async function(properties, context) {
-
-let axios = require('axios');
     //▶️ Criar fluxo
     
     let baseUrl = properties.url;
@@ -61,26 +59,25 @@ let axios = require('axios');
     let response;
     let error = false;
     let error_log;
-    ;
+    let resultObj;
 
     try {
-            response = await axios({
-            url: url,
-            method: 'post',
+        response = await fetch(url, {
+            method: 'POST',
             headers: headers,
-            body: raw
+            body: JSON.stringify(raw)
         });
 
-        if (response.status !== 200) {
+        if (!response.ok) {
             error = true;
-            
+            const responseBody = await response.json();
             return {
                 error: error,
-                error_log: JSON.stringify(response.data, null, 2).replace(/"_p_/g, "\"")
+                error_log: JSON.stringify(responseBody, null, 2).replace(/"_p_/g, "\"")
             };
         }
 
-        
+        resultObj = await response.json();
     } catch (e) {
         error = true;
         error_log = e.toString();
@@ -91,9 +88,9 @@ let axios = require('axios');
     }
 
     return {
-        flow: response.data,
+        flow: resultObj,
         error: String(error),
-        log: JSON.stringify(response.data, null, 2).replace(/"_p_/g, "\""),
+        log: JSON.stringify(resultObj, null, 2).replace(/"_p_/g, "\""),
         error_log: String(error_log)
     };
 }

@@ -1,6 +1,4 @@
 async function(properties, context) {
-
-let axios = require('axios');
     //▶️ Buscar etiquetas
     
     let baseUrl = properties.url;
@@ -28,37 +26,32 @@ let axios = require('axios');
     };
 
 
-    let response, response.data;
+    let response, resultObj;
     let error = false;
     let error_log;
 
     try {
-            response = await axios({
-            url: url,
-            method: 'get',
+        response = await fetch(url, {
+            method: 'GET',
             headers: headers,
         });
 
-        if (response.status !== 200) {
+        if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
 
-        
+        resultObj = await response.json();
         
 
-    } catch (e) {
+    } catch(e) {
         error = true;
         error_log = e.toString();
-        return {
-            error: error,
-            error_log: error_log
-        };
     }
 
 		return {
-        etiquetas: response.data,
+        etiquetas: resultObj,
         error: error,
-        log: JSON.stringify(response.data, null, 2).replace(/"_p_/g, "\""),
+        log: JSON.stringify(resultObj, null, 2).replace(/"_p_/g, "\""),
         error_log: error_log
     };
 }
