@@ -269,6 +269,5 @@
             "value": "text"
         }
     },
-    "type": "server_side",
-    "use_packages": true
+    "type": "server_side"
 }

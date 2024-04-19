@@ -1,6 +1,4 @@
 async function(properties, context) {
-
-let axios = require('axios');
     //▶️ Grupo - Url de convite
     
     let baseUrl = properties.url;
@@ -41,46 +39,37 @@ let axios = require('axios');
     let response;
     let error = false;
     let error_log;
-    ;
+    let resultObj;
 
     try {
-            response = await axios({
-            url: url,
-            method: 'get',
+        response = await fetch(url, {
+            method: 'GET',
             headers: headers
         });
 
-         if (response.status < 200 || response.status >= 300) {
+        if (!response.ok) {
             error = true;
-            
+            const responseBody = await response.json();
             return {
                 error: error,
-                error_log: JSON.stringify(response.data, null, 2).replace(/"_p_/g, "\"")
+                error_log: JSON.stringify(responseBody, null, 2).replace(/"_p_/g, "\"")
             };
         }
 
-        
+        resultObj = await response.json();
     } catch (e) {
         error = true;
-        error_log = `Error: ${e.message}`;
-
-    // Verifica se o objeto de resposta existe no erro e captura os dados de resposta
-    if (e.response) {
-        // JSON.stringify pode ser removido dependendo de como você quer logar/tratar o erro
-        error_log += " | Detailed: " + JSON.stringify(e.response.data);
+        error_log = e.toString();
+        return {
+            error: error,
+            error_log: error_log
+        };
     }
 
     return {
-        error: error,
-        error_log: error_log
-    };
-}
-
-    
-    return {
-        url: response.data.inviteUrl,
+        url: resultObj.inviteUrl,
         error: String(error),
-        log: JSON.stringify(response.data, null, 2).replace(/"_p_/g, "\""),
+        log: JSON.stringify(resultObj, null, 2).replace(/"_p_/g, "\""),
         error_log: String(error_log)
     };
 }

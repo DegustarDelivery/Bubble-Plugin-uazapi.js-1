@@ -1,6 +1,4 @@
 async function(properties, context) {
-
-let axios = require('axios');
     //▶️ Enviar audio
     
     let baseUrl = properties.url;
@@ -55,50 +53,37 @@ send = "https:" + properties.audio;
         }
     };
     
-    let response, response.data;
+    let response, resultObj;
     let error = false;
     let error_log;
 
     try {
-            response = await axios({
-            url: url,
-            method: 'post',
+        response = await fetch(url, {
+            method: 'POST',
             headers: headers,
-            data: body
+            body: JSON.stringify(body)
         });
-        
+        resultObj = await response.json();
+    } catch(e) {
+        error = true;
+        error_log = e.toString();
+    }
 
-     if (response.status < 200 || response.status >= 300) {
+    if (!response.ok) {
         error = true;
         return {
             error: error,
-            error_log: JSON.stringify(response.data, null, 2).replace(/"_p_/g, "\""),
+            error_log: JSON.stringify(resultObj, null, 2).replace(/"_p_/g, "\""),
         };
     } 
 
-} catch (e) {
-    error = true;
-    error_log = `Error: ${e.message}`;
-
-    // Verifica se o objeto de resposta existe no erro e captura os dados de resposta
-    if (e.response) {
-        // JSON.stringify pode ser removido dependendo de como você quer logar/tratar o erro
-        error_log += " | Detailed: " + JSON.stringify(e.response.data);
-    }
-
     return {
+        remoteJid: resultObj?.key?.remoteJid,
+        fromMe: resultObj?.key?.fromMe,
+        id: resultObj?.key?.id,
+        status: resultObj?.status ? resultObj?.status.toString() : undefined,
         error: error,
-        error_log: error_log
-    };
-}
-
-    return {
-        remoteJid: response.data?.key?.remoteJid,
-        fromMe: response.data?.key?.fromMe,
-        id: response.data?.key?.id,
-        status: response.data?.status ? response.data?.status.toString() : undefined,
-        error: error,
-        log: JSON.stringify(response.data, null, 2).replace(/"_p_/g, "\""),
+        log: JSON.stringify(resultObj, null, 2).replace(/"_p_/g, "\""),
         error_log: error_log,
     };
 }

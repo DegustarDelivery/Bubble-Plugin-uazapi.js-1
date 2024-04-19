@@ -1,6 +1,4 @@
 async function(properties, context) {
-
-let axios = require('axios');
     //▶️ Enviar texto
 
     let baseUrl = properties.url;
@@ -39,7 +37,7 @@ let axios = require('axios');
         "apikey": apikey
     };
 
-    const data = {
+    const raw = {
         "number": properties.number,
         "textMessage": {
             "text": properties.text
@@ -52,11 +50,11 @@ let axios = require('axios');
     };
 
     if (properties.mentions === true) {
-        data.options.mentions = { "everyOne": true };
+        raw.options.mentions = { "everyOne": true };
     }
 
     if (properties.quoted && properties.quoted.trim() !== "") {
-        data.options.quoted = { key: { id: properties.quoted.trim() } };
+        raw.options.quoted = { key: { id: properties.quoted.trim() } };
     }
 
     let response;
@@ -64,48 +62,45 @@ let axios = require('axios');
     let error_log;
 
     try {
-    response = await axios({
-            method: 'post',
-            url: url,
+        response = await fetch(url, {
+            method: 'POST',
             headers: headers,
-            data: data
+            body: JSON.stringify(raw)
         });
 
-         if (response.status < 200 || response.status >= 300) {
+        if (!response.ok) {
             error = true;
-            
+            const responseBody = await response.json();
             return {
                 error: error,
-                error_log: JSON.stringify(response.data, null, 2).replace(/"_p_/g, "\"")
+                error_log: JSON.stringify(responseBody, null, 2).replace(/"_p_/g, "\"")
             };
         }
 
     } catch (e) {
         error = true;
         error_log = `Error: ${e.message}`;
-
-    // Verifica se o objeto de resposta existe no erro e captura os dados de resposta
-    if (e.response) {
-        // JSON.stringify pode ser removido dependendo de como você quer logar/tratar o erro
-        error_log += " | Detailed: " + JSON.stringify(e.response.data);
+        console.log(e); // Log detalhado do erro ajustado, se funcionar, replicar para outras funções
+        return {
+            error: error,
+            error_log: error_log
+        };
     }
 
+    // Verificar se a resposta não é nula antes de tentar ler o JSON
+    let resultObj;
+    if (response) {
+        resultObj = await response.json();
+    }
+
+    // Verificar se resultObj não é nulo antes de acessar suas propriedades
     return {
+        remoteJid: resultObj && resultObj.key ? resultObj.key.remoteJid : undefined,
+        fromMe: resultObj && resultObj.key ? resultObj.key.fromMe : undefined,
+        id: resultObj && resultObj.key ? resultObj.key.id : undefined,
+        status: resultObj && resultObj.status ? resultObj.status.toString() : undefined,
         error: error,
-        error_log: error_log
-    };
-}
-
-
-
-    // Verificar se response.data não é nulo antes de acessar suas propriedades
-    return {
-        remoteJid: response.data && response.data.key ? response.data.key.remoteJid : undefined,
-        fromMe: response.data && response.data.key ? response.data.key.fromMe : undefined,
-        id: response.data && response.data.key ? response.data.key.id : undefined,
-        status: response.data && response.data.status ? response.data.status.toString() : undefined,
-        error: error,
-        log: response.data ? JSON.stringify(response.data, null, 2).replace(/"_p_/g, "\"") : undefined,
+        log: resultObj ? JSON.stringify(resultObj, null, 2).replace(/"_p_/g, "\"") : undefined,
         error_log: error_log
     };
 }

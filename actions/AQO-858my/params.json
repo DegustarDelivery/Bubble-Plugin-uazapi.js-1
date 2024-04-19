@@ -70,5 +70,5 @@
         }
     },
     "type": "server_side",
-    "use_packages": true
+    "use_packages": false
 }
