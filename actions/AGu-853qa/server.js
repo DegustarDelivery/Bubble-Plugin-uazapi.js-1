@@ -83,15 +83,20 @@ let axios = require('axios');
     } catch (e) {
         error = true;
         error_log = `Error: ${e.message}`;
-        console.log(e); // Log detalhado do erro ajustado, se funcionar, replicar para outras funções
-        return {
-            error: error,
-            error_log: error_log
-        };
+
+    // Verifica se o objeto de resposta existe no erro e captura os dados de resposta
+    if (e.response) {
+        // JSON.stringify pode ser removido dependendo de como você quer logar/tratar o erro
+        error_log += " | Detailed: " + JSON.stringify(e.response.data);
     }
 
-    // Verificar se a resposta não é nula antes de tentar ler o JSON
-    let 
+    return {
+        error: error,
+        error_log: error_log
+    };
+}
+
+
 
     // Verificar se response.data não é nulo antes de acessar suas propriedades
     return {
