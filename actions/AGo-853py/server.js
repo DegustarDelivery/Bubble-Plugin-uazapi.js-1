@@ -54,29 +54,34 @@ async function(properties, context) {
             headers: headers,
             body: body
         });
-    } catch(e) {
-        error = true;
-        error_log = e.toString();
-    }
+
 
     if (response.status !== 200) {
         error = true;
-        const responseBody = response.data;
+        
         return {
             error: error,
-            error_log: JSON.stringify(responseBody, null, 2).replace(/"_p_/g, "\"")
+            error_log: JSON.stringify(response.data, null, 2).replace(/"_p_/g, "\"")
         };
     } 
 
-    const resultObj = response.data;
+} catch (e) {
+    error = true;
+    error_log = e.toString();
+    return {
+        error: error,
+        error_log: error_log
+    };
+}
+    
 
     return {
-        log: JSON.stringify(resultObj, null, 2).replace(/"_p_/g, "\""),
-        instancia: resultObj.instance?.instanceName,
-        status: resultObj.instance?.status,
-        apikey: resultObj.hash?.apikey,
-        qrcode: resultObj.qrcode?.base64,
-        paircode: resultObj.qrcode?.pairingCode,
+        log: JSON.stringify(response.data, null, 2).replace(/"_p_/g, "\""),
+        instancia: response.data.instance?.instanceName,
+        status: response.data.instance?.status,
+        apikey: response.data.hash?.apikey,
+        qrcode: response.data.qrcode?.base64,
+        paircode: response.data.qrcode?.pairingCode,
         error: error,
         error_log: error_log        
     };

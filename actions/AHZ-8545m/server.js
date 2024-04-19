@@ -62,7 +62,7 @@ async function(properties, context) {
         "GROUP_PARTICIPANTS_UPDATE":properties.GROUP_PARTICIPANTS_UPDATE
     };
 
-    let response, resultObj;
+    let response, response.data;
     let error = false;
     let error_log;
 
@@ -73,24 +73,30 @@ async function(properties, context) {
             headers: headers,
             body: body
         });
-        resultObj = response.data;
-    } catch(e) {
-        error = true;
-        error_log = e.toString();
-    }
+        
+
 
     if (response.status !== 200) {
         error = true;
         return {
             error: error,
-            error_log: JSON.stringify(resultObj, null, 2).replace(/"_p_/g, "\""),
+            error_log: JSON.stringify(response.data, null, 2).replace(/"_p_/g, "\""),
         };
     } 
 
+} catch (e) {
+    error = true;
+    error_log = e.toString();
     return {
-        webhook_status: resultObj.webhook,
         error: error,
-        log: JSON.stringify(resultObj, null, 2).replace(/"_p_/g, "\""),
+        error_log: error_log
+    };
+}
+
+    return {
+        webhook_status: response.data.webhook,
+        error: error,
+        log: JSON.stringify(response.data, null, 2).replace(/"_p_/g, "\""),
         error_log: error_log,
     };
 }

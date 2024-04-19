@@ -70,7 +70,7 @@ async function(properties, context) {
     if(properties.delay != null) raw.message.delay = properties.delay;
 
 
-    let response, resultObj;
+    let response, response.data;
     let error = false;
     let error_log;
 
@@ -81,24 +81,29 @@ async function(properties, context) {
             headers: headers,
             body: raw
         });
-        resultObj = response.data;
-    } catch(e) {
-        error = true;
-        error_log = e.toString();
-    }
+        
 
     if (response.status !== 200) {
         error = true;
         return {
             error: error,
-            error_log: JSON.stringify(resultObj, null, 2).replace(/"_p_/g, "\""),
+            error_log: JSON.stringify(response.data, null, 2).replace(/"_p_/g, "\""),
         };
     }
 
+} catch (e) {
+    error = true;
+    error_log = e.toString();
     return {
-        envioagendado: resultObj,
         error: error,
-        log: JSON.stringify(resultObj, null, 2).replace(/"_p_/g, "\""),
+        error_log: error_log
+    };
+}
+
+    return {
+        envioagendado: response.data,
+        error: error,
+        log: JSON.stringify(response.data, null, 2).replace(/"_p_/g, "\""),
         error_log: error_log
     };
 }

@@ -71,10 +71,10 @@ async function(properties, context) {
 
         if (response.status !== 200) {
             error = true;
-            const responseBody = response.data;
+            
             return {
                 error: error,
-                error_log: JSON.stringify(responseBody, null, 2).replace(/"_p_/g, "\"")
+                error_log: JSON.stringify(response.data, null, 2).replace(/"_p_/g, "\"")
             };
         }
 
@@ -89,16 +89,16 @@ async function(properties, context) {
     }
 
     // Verificar se a resposta não é nula antes de tentar ler o JSON
-    let resultObj = response.data;
+    let 
 
-    // Verificar se resultObj não é nulo antes de acessar suas propriedades
+    // Verificar se response.data não é nulo antes de acessar suas propriedades
     return {
-        remoteJid: resultObj && resultObj.key ? resultObj.key.remoteJid : undefined,
-        fromMe: resultObj && resultObj.key ? resultObj.key.fromMe : undefined,
-        id: resultObj && resultObj.key ? resultObj.key.id : undefined,
-        status: resultObj && resultObj.status ? resultObj.status.toString() : undefined,
+        remoteJid: response.data && response.data.key ? response.data.key.remoteJid : undefined,
+        fromMe: response.data && response.data.key ? response.data.key.fromMe : undefined,
+        id: response.data && response.data.key ? response.data.key.id : undefined,
+        status: response.data && response.data.status ? response.data.status.toString() : undefined,
         error: error,
-        log: resultObj ? JSON.stringify(resultObj, null, 2).replace(/"_p_/g, "\"") : undefined,
+        log: response.data ? JSON.stringify(response.data, null, 2).replace(/"_p_/g, "\"") : undefined,
         error_log: error_log
     };
 }

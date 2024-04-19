@@ -30,7 +30,7 @@ async function(properties, context) {
         "presence": properties.presence
     });
 
-    let response, resultObj;
+    let response, response.data;
     let error = false;
     let error_log;
 
@@ -46,16 +46,19 @@ async function(properties, context) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
 
-        resultObj = response.data;
+        
         
 
-    } catch(e) {
+    } catch (e) {
         error = true;
         error_log = e.toString();
+        return {
+            error: error,
+            error_log: error_log
+        };
     }
-
     return {
-        resultado: resultObj ? JSON.stringify(resultObj, null, 2).replace(/"_p_/g, "\"") : null,
+        resultado: response.data ? JSON.stringify(response.data, null, 2).replace(/"_p_/g, "\"") : null,
         error: error,
         error_log: error_log
     };

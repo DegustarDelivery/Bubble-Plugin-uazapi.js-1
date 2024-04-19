@@ -84,27 +84,31 @@ async function(properties, context) {
 
         if (response.status !== 200) {
             error = true;
-            const responseBody = response.data;
+            
             return {
                 error: error,
-                error_log: JSON.stringify(responseBody, null, 2).replace(/"_p_/g, "\"")
+                error_log: JSON.stringify(response.data, null, 2).replace(/"_p_/g, "\"")
             };
         }
 
     } catch (e) {
         error = true;
         error_log = e.toString();
+        return {
+            error: error,
+            error_log: error_log
+        };
     }
 
-    const resultObj = response.data;
+    
 
     return {
-        remoteJid: resultObj?.key?.remoteJid,
-        fromMe: resultObj?.key?.fromMe,
-        id: resultObj?.key?.id,
-        status: resultObj?.status ? resultObj?.status.toString() : undefined,
+        remoteJid: response.data?.key?.remoteJid,
+        fromMe: response.data?.key?.fromMe,
+        id: response.data?.key?.id,
+        status: response.data?.status ? response.data?.status.toString() : undefined,
         error: error,
-        log: JSON.stringify(resultObj, null, 2).replace(/"_p_/g, "\""),
+        log: JSON.stringify(response.data, null, 2).replace(/"_p_/g, "\""),
         error_log: error_log
     };
 }

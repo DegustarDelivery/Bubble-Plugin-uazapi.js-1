@@ -40,7 +40,7 @@ async function(properties, context) {
     let response;
     let error = false;
     let error_log;
-    let resultObj;
+    ;
 
     try {
             response = await axios({
@@ -51,14 +51,14 @@ async function(properties, context) {
 
         if (response.status !== 200) {
             error = true;
-            const responseBody = response.data;
+            
             return {
                 error: error,
-                error_log: JSON.stringify(responseBody, null, 2).replace(/"_p_/g, "\"")
+                error_log: JSON.stringify(response.data, null, 2).replace(/"_p_/g, "\"")
             };
         }
 
-        resultObj = response.data;
+        
     } catch (e) {
         error = true;
         error_log = e.toString();
@@ -68,10 +68,12 @@ async function(properties, context) {
         };
     }
 
+    
+
     return {
-        chats: resultObj,
+        chats: response.data,
         error: String(error),
-        log: JSON.stringify(resultObj, null, 2).replace(/"_p_/g, "\""),
+        log: JSON.stringify(response.data, null, 2).replace(/"_p_/g, "\""),
         error_log: String(error_log)
     };
 }
