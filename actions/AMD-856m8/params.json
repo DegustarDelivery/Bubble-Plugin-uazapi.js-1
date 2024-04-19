@@ -65,5 +65,6 @@
             "value": "custom_data_AMM"
         }
     },
-    "type": "server_side"
+    "type": "server_side",
+    "use_packages": true
 }

@@ -94,5 +94,6 @@
             "value": "custom_data_AJF"
         }
     },
-    "type": "server_side"
+    "type": "server_side",
+    "use_packages": true
 }
