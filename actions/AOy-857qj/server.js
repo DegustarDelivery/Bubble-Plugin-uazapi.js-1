@@ -1,6 +1,4 @@
 async function(properties, context) {
-
-let axios = require('axios');
     //⚡Arquivar Conversa
 
     let baseUrl = properties.url;
@@ -38,34 +36,29 @@ let axios = require('axios');
         "archive": properties.archive
     });
 
-    let response, response.data;
+    let response, resultObj;
     let error = false;
     let error_log;
 
     try {
-            response = await axios({
-            url: url,
-            method: 'put',
+        response = await fetch(url, {
+            method: 'PUT',
             headers: headers,
-            data: raw
+            body: raw
         });
         
-         if (response.status < 200 || response.status >= 300) {
+        if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
 
-        
-    } catch (e) {
+        resultObj = await response.json();
+    } catch(e) {
         error = true;
         error_log = e.toString();
-        return {
-            error: error,
-            error_log: error_log
-        };
     }
 
     return {
-        resultado: response.data ? JSON.stringify(response.data, null, 2).replace(/"_p_/g, "\"") : null,
+        resultado: resultObj ? JSON.stringify(resultObj, null, 2).replace(/"_p_/g, "\"") : null,
         error: error,
         error_log: error_log
     };

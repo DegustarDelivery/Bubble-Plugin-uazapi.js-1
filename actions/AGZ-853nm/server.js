@@ -1,6 +1,4 @@
 async function(properties, context) {
-
-let axios = require('axios');
     //▶️ Instancia - Buscar todas
     
     let baseUrl = properties.url;
@@ -38,25 +36,24 @@ let axios = require('axios');
     let response;
     let error = false;
     let error_log;
-    ;
+    let resultObj;
 
     try {
-            response = await axios({
-            url: url,
-            method: 'get',
+        response = await fetch(url, {
+            method: 'GET',
             headers: headers
         });
 
-         if (response.status < 200 || response.status >= 300) {
+        if (!response.ok) {
             error = true;
-            
+            const responseBody = await response.json();
             return {
                 error: error,
-                error_log: JSON.stringify(response.data, null, 2).replace(/"_p_/g, "\"")
+                error_log: JSON.stringify(responseBody, null, 2).replace(/"_p_/g, "\"")
             };
         }
 
-        
+        resultObj = await response.json();
 
     } catch (e) {
         error = true;
@@ -68,9 +65,9 @@ let axios = require('axios');
     }
 
     return {
-        instancias: response.data,
+        instancias: resultObj,
         error: error,
-        log: JSON.stringify(response.data, null, 2).replace(/"_p_/g, "\""),
+        log: JSON.stringify(resultObj, null, 2).replace(/"_p_/g, "\""),
         error_log: error_log
     };
 }

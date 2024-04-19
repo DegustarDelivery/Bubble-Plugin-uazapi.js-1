@@ -1,6 +1,4 @@
 async function(properties, context) {
-
-let axios = require('axios');
     //▶️ Mensagem - Baixar arquivo
     
     let baseUrl = properties.url;
@@ -47,26 +45,25 @@ let axios = require('axios');
     let response;
     let error = false;
     let error_log;
-    ;
+    let resultObj;
 
     try {
-            response = await axios({
-            url: url,
-            method: 'post',
+        response = await fetch(url, {
+            method: 'POST',
             headers: headers,
-            data: raw
+            body: JSON.stringify(raw)
         });
 
-         if (response.status < 200 || response.status >= 300) {
+        if (!response.ok) {
             error = true;
-            
+            const responseBody = await response.json();
             return {
                 error: error,
-                error_log: JSON.stringify(response.data, null, 2).replace(/"_p_/g, "\"")
+                error_log: JSON.stringify(responseBody, null, 2).replace(/"_p_/g, "\"")
             };
         }
 
-        
+        resultObj = await response.json();
     } catch (e) {
         error = true;
         error_log = e.toString();
@@ -76,13 +73,12 @@ let axios = require('axios');
         };
     }
 
-    
     return {
         error: error,
-        log: JSON.stringify(response.data, null, 2).replace(/"_p_/g, "\""),
+        log: JSON.stringify(resultObj, null, 2).replace(/"_p_/g, "\""),
         error_log: error_log,
-        base64: response.data?.base64,
-        fileUrl: response.data?.fileUrl,
-        expires_fileUrl: response.data?.expires_fileUrl,
+        base64: resultObj?.base64,
+        fileUrl: resultObj?.fileUrl,
+        expires_fileUrl: resultObj?.expires_fileUrl,
     };
 }

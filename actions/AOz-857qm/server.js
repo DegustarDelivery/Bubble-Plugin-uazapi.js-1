@@ -1,6 +1,4 @@
 async function(properties, context) {
-
-let axios = require('axios');
     //⚡Enviar Digitando... / Gravando...
 
     let baseUrl = properties.url;
@@ -32,35 +30,31 @@ let axios = require('axios');
         "presence": properties.presence
     });
 
-    let response
+    let response, resultObj;
     let error = false;
     let error_log;
 
     try {
-            response = await axios({
-            url: url,
-            method: 'post',
+        response = await fetch(url, {
+            method: 'POST',
             headers: headers,
-            data: raw
+            body: raw
         });
 
-         if (response.status < 200 || response.status >= 300) {
+        if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
 
-        
+        resultObj = await response.json();
         
 
-    } catch (e) {
+    } catch(e) {
         error = true;
         error_log = e.toString();
-        return {
-            error: error,
-            error_log: error_log
-        };
     }
+
     return {
-        resultado: response.data ? JSON.stringify(response.data, null, 2).replace(/"_p_/g, "\"") : null,
+        resultado: resultObj ? JSON.stringify(resultObj, null, 2).replace(/"_p_/g, "\"") : null,
         error: error,
         error_log: error_log
     };
