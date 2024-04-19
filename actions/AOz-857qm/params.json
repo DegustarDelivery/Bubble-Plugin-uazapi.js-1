@@ -71,5 +71,6 @@
             "value": "text"
         }
     },
-    "type": "server_side"
+    "type": "server_side",
+    "use_packages": true
 }

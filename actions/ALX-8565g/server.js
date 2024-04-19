@@ -1,4 +1,6 @@
 async function(properties, context) {
+
+let axios = require('axios');
     //▶️ Grupo - tempo das mensagens
     
     let baseUrl = properties.url;
@@ -40,33 +42,47 @@ async function(properties, context) {
         "expiration": properties.expiration
     };
 
-    let response, resultObj;
+    let response, response.data;
     let error = false;
     let error_log;
 
     try {
-        response = await fetch(url, {
-            method: 'PUT',
+            response = await axios({
+            url: url,
+            method: 'put',
             headers: headers,
-            body: JSON.stringify(body)
+            data: body
         });
-        resultObj = await response.json();
-    } catch(e) {
-        error = true;
-        error_log = e.toString();
-    }
+        
 
-    if (!response.ok) {
+
+     if (response.status < 200 || response.status >= 300) {
         error = true;
         return {
             error: error,
-            error_log: JSON.stringify(resultObj, null, 2).replace(/"_p_/g, "\""),
+            error_log: JSON.stringify(response.data, null, 2).replace(/"_p_/g, "\""),
         };
     } 
 
+} catch (e) {
+    error = true;
+    error_log = `Error: ${e.message}`;
+
+    // Verifica se o objeto de resposta existe no erro e captura os dados de resposta
+    if (e.response) {
+        // JSON.stringify pode ser removido dependendo de como você quer logar/tratar o erro
+        error_log += " | Detailed: " + JSON.stringify(e.response.data);
+    }
+
     return {
         error: error,
-        log: JSON.stringify(resultObj, null, 2).replace(/"_p_/g, "\""),
+        error_log: error_log
+    };
+}
+
+    return {
+        error: error,
+        log: JSON.stringify(response.data, null, 2).replace(/"_p_/g, "\""),
         error_log: error_log,
     };
 }

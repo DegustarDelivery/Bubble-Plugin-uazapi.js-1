@@ -79,5 +79,6 @@
             "value": "custom_data_API"
         }
     },
-    "type": "server_side"
+    "type": "server_side",
+    "use_packages": true
 }

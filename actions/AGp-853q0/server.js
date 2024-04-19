@@ -1,4 +1,6 @@
 async function(properties, context) {
+
+let axios = require('axios');
     //▶️ Instancia - Informações
     
     let baseUrl = properties.url;
@@ -43,30 +45,44 @@ async function(properties, context) {
     let error_log;
 
     try {
-        response = await fetch(url, {
-            method: 'GET',
+            response = await axios({
+            url: url,
+            method: 'get',
             headers: headers
         });
-    } catch (e) {
-        error = true;
-        error_log = e.toString();
-    }
 
-    if (!response.ok) {
+
+     if (response.status < 200 || response.status >= 300) {
         error = true;
-        const responseBody = await response.json();
+        
         return {
             error: error,
-            error_log: JSON.stringify(responseBody, null, 2).replace(/"_p_/g, "\"")
+            error_log: JSON.stringify(response.data, null, 2).replace(/"_p_/g, "\"")
         };
     }
 
-    const resultObj = await response.json();
+} catch (e) {
+    error = true;
+    error_log = `Error: ${e.message}`;
+
+    // Verifica se o objeto de resposta existe no erro e captura os dados de resposta
+    if (e.response) {
+        // JSON.stringify pode ser removido dependendo de como você quer logar/tratar o erro
+        error_log += " | Detailed: " + JSON.stringify(e.response.data);
+    }
 
     return {
-        instancia: resultObj,
         error: error,
-        log: JSON.stringify(resultObj, null, 2).replace(/"_p_/g, "\""),
+        error_log: error_log
+    };
+}
+
+    
+
+    return {
+        instancia: response.data,
+        error: error,
+        log: JSON.stringify(response.data, null, 2).replace(/"_p_/g, "\""),
         error_log: error_log,
     };
 }

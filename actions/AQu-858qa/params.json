@@ -230,5 +230,6 @@
             "value": "custom_data_AQv"
         }
     },
-    "type": "server_side"
+    "type": "server_side",
+    "use_packages": true
 }
