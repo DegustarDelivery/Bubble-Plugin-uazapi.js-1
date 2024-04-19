@@ -65,11 +65,15 @@ let axios = require('axios');
     error = true;
     error_log = `Error: ${e.message}`;
 
-// Verifica se o objeto de resposta existe no erro e captura os dados de resposta
-if (e.response) {
-    // JSON.stringify pode ser removido dependendo de como você quer logar/tratar o erro
-    error_log += " | Detailed: " + JSON.stringify(e.response.data);
-}
+    // Melhorando a verificação e extração de detalhes do erro
+    if (e.response) {
+        let detailedError = e.response.data.message || e.response.data;  // Preferindo a mensagem de erro se disponível
+        if (typeof detailedError === 'object') {
+            detailedError = JSON.stringify(detailedError);
+        }
+        error_log += " | Detailed: " + detailedError;
+    }
+
 
 return {
     error: error,
