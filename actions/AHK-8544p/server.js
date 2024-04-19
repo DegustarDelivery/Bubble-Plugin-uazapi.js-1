@@ -43,12 +43,13 @@ async function(properties, context) {
     let resultObj;
 
     try {
-        response = await fetch(url, {
+                response = await axios({
+            url: url,
             method: 'GET',
             headers: headers
         });
 
-        if (!response.ok) {
+        if (response.status !== 200) {
             error = true;
             const responseBody = await response.json();
             return {

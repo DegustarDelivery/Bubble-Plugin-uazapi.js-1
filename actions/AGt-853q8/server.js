@@ -43,7 +43,8 @@ async function(properties, context) {
     let error_log;
 
     try {
-        response = await fetch(url, {
+                response = await axios({
+            url: url,
             method: 'DELETE',
             headers: headers
         });
@@ -52,7 +53,7 @@ async function(properties, context) {
         error_log = e.toString();
     }
 
-    if (!response.ok) {
+    if (response.status !== 200) {
         error = true;
         const responseBody = await response.json();
         return {

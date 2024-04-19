@@ -52,13 +52,14 @@ async function(properties, context) {
     let resultObj;
 
     try {
-        response = await fetch(url, {
+                response = await axios({
+            url: url,
             method: 'PUT',
             headers: headers,
-            body: JSON.stringify(raw)
+            body: raw
         });
 
-        if (!response.ok) {
+        if (response.status !== 200) {
             error = true;
             const responseBody = await response.json();
             return {

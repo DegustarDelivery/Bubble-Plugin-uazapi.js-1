@@ -62,10 +62,11 @@ async function(properties, context) {
     let error_log;
 
     try {
-        response = await fetch(url, {
+            response = await axios({
+            url: url,
             method: 'POST',
             headers: headers,
-            body: JSON.stringify(raw)
+            body: raw
         });
 
         if (!response.ok) {

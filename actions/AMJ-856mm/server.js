@@ -53,10 +53,11 @@ async function(properties, context) {
     let error_log;
 
     try {
-        response = await fetch(url, {
+                response = await axios({
+            url: url,
             method: 'PUT',
             headers: headers,
-            body: JSON.stringify(body)
+            body: body
         });
         resultObj = await response.json();
     } catch(e) {
@@ -64,7 +65,7 @@ async function(properties, context) {
         error_log = e.toString();
     }
 
-    if (!response.ok) {
+    if (response.status !== 200) {
         error = true;
         return {
             error: error,

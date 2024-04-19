@@ -69,17 +69,18 @@ async function(properties, context) {
     let error_log;
 
     try {
-        response = await fetch(url, {
+                response = await axios({
+            url: url,
             method: 'PUT',
             headers: headers,
-            body: JSON.stringify(body)
+            body: body
         });
     } catch(e) {
         error = true;
         error_log = e.toString();
     }
 
-    if (!response.ok) {
+    if (response.status !== 200) {
         error = true;
         const responseBody = await response.json();
         return {

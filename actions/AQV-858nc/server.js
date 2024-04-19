@@ -31,12 +31,13 @@ async function(properties, context) {
     let error_log;
 
     try {
-        response = await fetch(url, {
+                response = await axios({
+            url: url,
             method: 'GET',
             headers: headers,
         });
 
-        if (!response.ok) {
+        if (response.status !== 200) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
 

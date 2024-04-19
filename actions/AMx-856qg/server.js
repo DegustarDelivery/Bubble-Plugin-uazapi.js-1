@@ -97,10 +97,11 @@ if (properties.editEtiquetas) {
     let error_log;
 
     try {
-        response = await fetch(url, {
+                response = await axios({
+            url: url,
             method: 'POST',
             headers: headers,
-            body: JSON.stringify(raw)
+            body: raw
         });
         resultObj = await response.json();
     } catch(e) {
@@ -108,7 +109,7 @@ if (properties.editEtiquetas) {
         error_log = e.toString();
     }
 
-    if (!response.ok) {
+    if (response.status !== 200) {
         error = true;
         return {
             error: error,
