@@ -41,9 +41,9 @@ async function(properties, context) {
     let error_log;
 
     try {
-                response = await axios({
+            response = await axios({
             url: url,
-            method: 'PUT',
+            method: 'put',
             headers: headers,
             body: raw
         });
@@ -52,7 +52,7 @@ async function(properties, context) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
 
-        resultObj = await response.json();
+        resultObj = response.data;
     } catch(e) {
         error = true;
         error_log = e.toString();

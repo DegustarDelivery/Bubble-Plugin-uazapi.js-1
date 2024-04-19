@@ -75,16 +75,16 @@ async function(properties, context) {
     let error_log;
 
     try {
-                response = await axios({
+            response = await axios({
             url: url,
-            method: 'POST',
+            method: 'post',
             headers: headers,
             body: raw
         });
 
         if (response.status !== 200) {
             error = true;
-            const responseBody = await response.json();
+            const responseBody = response.data;
             return {
                 error: error,
                 error_log: JSON.stringify(responseBody, null, 2).replace(/"_p_/g, "\"")
@@ -96,7 +96,7 @@ async function(properties, context) {
         error_log = e.toString();
     }
 
-    const resultObj = await response.json();
+    const resultObj = response.data;
 
     return {
         remoteJid: resultObj?.key?.remoteJid,

@@ -51,16 +51,16 @@ async function(properties, context) {
     let resultObj;
 
     try {
-                response = await axios({
+            response = await axios({
             url: url,
-            method: 'POST',
+            method: 'post',
             headers: headers,
             body: raw
         });
 
         if (response.status !== 200) {
             error = true;
-            const responseBody = await response.json();
+            const responseBody = response.data;
             return {
                 error: error,
                 status: response.status.toString(),
@@ -68,7 +68,7 @@ async function(properties, context) {
             };
         }
 
-        resultObj = await response.json();
+        resultObj = response.data;
     } catch (e) {
         error = true;
         error_log = e.toString();

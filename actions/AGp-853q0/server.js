@@ -43,9 +43,9 @@ async function(properties, context) {
     let error_log;
 
     try {
-                response = await axios({
+            response = await axios({
             url: url,
-            method: 'GET',
+            method: 'get',
             headers: headers
         });
     } catch (e) {
@@ -55,14 +55,14 @@ async function(properties, context) {
 
     if (response.status !== 200) {
         error = true;
-        const responseBody = await response.json();
+        const responseBody = response.data;
         return {
             error: error,
             error_log: JSON.stringify(responseBody, null, 2).replace(/"_p_/g, "\"")
         };
     }
 
-    const resultObj = await response.json();
+    const resultObj = response.data;
 
     return {
         instancia: resultObj,

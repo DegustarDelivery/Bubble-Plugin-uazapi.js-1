@@ -46,12 +46,12 @@ async function(properties, context) {
     let error_log;
 
     try {
-                response = await axios({
+            response = await axios({
             url: url,
-            method: 'GET',
+            method: 'get',
             headers: myHeaders,
         });
-        resultObj = await response.json();
+        resultObj = response.data;
     } catch(e) {
         error = true;
         error_log = e.toString();

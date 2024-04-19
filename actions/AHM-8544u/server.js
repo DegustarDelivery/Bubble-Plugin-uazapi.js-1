@@ -52,23 +52,23 @@ send = "https:" + properties.image;
     let resultObj;
 
     try {
-                response = await axios({
+            response = await axios({
             url: url,
-            method: 'PUT',
+            method: 'put',
             headers: headers,
             body: body
         });
 
         if (response.status !== 200) {
             error = true;
-            const responseBody = await response.json();
+            const responseBody = response.data;
             return {
                 error: error,
                 error_log: JSON.stringify(responseBody, null, 2).replace(/"_p_/g, "\"")
             };
         }
 
-        resultObj = await response.json();
+        resultObj = response.data;
     } catch (e) {
         error = true;
         error_log = e.toString();

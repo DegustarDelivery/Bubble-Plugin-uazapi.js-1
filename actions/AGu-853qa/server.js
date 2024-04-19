@@ -37,7 +37,7 @@ async function(properties, context) {
         "apikey": apikey
     };
 
-    const raw = {
+    const data = {
         "number": properties.number,
         "textMessage": {
             "text": properties.text
@@ -50,11 +50,11 @@ async function(properties, context) {
     };
 
     if (properties.mentions === true) {
-        raw.options.mentions = { "everyOne": true };
+        data.options.mentions = { "everyOne": true };
     }
 
     if (properties.quoted && properties.quoted.trim() !== "") {
-        raw.options.quoted = { key: { id: properties.quoted.trim() } };
+        data.options.quoted = { key: { id: properties.quoted.trim() } };
     }
 
     let response;
@@ -62,16 +62,16 @@ async function(properties, context) {
     let error_log;
 
     try {
-            response = await axios({
+    response = await axios({
+            method: 'post',
             url: url,
-            method: 'POST',
             headers: headers,
-            body: raw
+            data: data
         });
 
-        if (!response.ok) {
+        if (response.status !== 200) {
             error = true;
-            const responseBody = await response.json();
+            const responseBody = response.data;
             return {
                 error: error,
                 error_log: JSON.stringify(responseBody, null, 2).replace(/"_p_/g, "\"")
@@ -89,10 +89,7 @@ async function(properties, context) {
     }
 
     // Verificar se a resposta não é nula antes de tentar ler o JSON
-    let resultObj;
-    if (response) {
-        resultObj = await response.json();
-    }
+    let resultObj = response.data;
 
     // Verificar se resultObj não é nulo antes de acessar suas propriedades
     return {

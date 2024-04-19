@@ -41,12 +41,12 @@ async function(properties, context) {
     let error_log;
 
     try {
-                response = await axios({
+            response = await axios({
             url: url,
-            method: 'DELETE',
+            method: 'delete',
             headers: headers
         });
-        resultObj = await response.json();
+        resultObj = response.data;
     } catch(e) {
         error = true;
         error_log = e.toString();
