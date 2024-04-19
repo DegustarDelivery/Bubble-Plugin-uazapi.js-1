@@ -1,4 +1,6 @@
 async function(properties, context) {
+
+let axios = require('axios');
     //▶️ Modificar Recado (status) Perfil
     
     let baseUrl = properties.url;

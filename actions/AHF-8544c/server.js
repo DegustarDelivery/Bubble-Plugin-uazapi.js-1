@@ -1,4 +1,6 @@
 async function(properties, context) {
+
+let axios = require('axios');
     //▶️ Ver imagem de perfil
     
     let baseUrl = properties.url;

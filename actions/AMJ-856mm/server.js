@@ -1,4 +1,6 @@
 async function(properties, context) {
+
+let axios = require('axios');
     //▶️ Alterar privacidade
     
     let baseUrl = properties.url;

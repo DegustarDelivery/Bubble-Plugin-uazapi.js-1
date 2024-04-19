@@ -1,4 +1,6 @@
 async function(properties, context) {
+
+let axios = require('axios');
     //▶️ Enviar localização
     
     let baseUrl = properties.url;

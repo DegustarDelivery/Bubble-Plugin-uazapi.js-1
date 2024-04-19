@@ -1,4 +1,6 @@
 async function(properties, context) {
+
+let axios = require('axios');
     let baseUrl = properties.url;
     if (!baseUrl || baseUrl.trim() === "" || !baseUrl.includes("http")) {
         baseUrl = context.keys["Server URL"];

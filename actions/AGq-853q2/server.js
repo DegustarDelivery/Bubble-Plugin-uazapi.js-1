@@ -1,4 +1,6 @@
 async function(properties, context) {
+
+let axios = require('axios');
     // ▶️ Instancia - QR Code
     
     let baseUrl = properties.url;

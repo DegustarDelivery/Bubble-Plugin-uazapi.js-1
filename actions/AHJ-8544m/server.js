@@ -1,4 +1,6 @@
 async function(properties, context) {
+
+let axios = require('axios');
     //▶️ Grupo - Criar
     
     let baseUrl = properties.url;

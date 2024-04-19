@@ -1,4 +1,6 @@
 async function(properties, context) {
+
+let axios = require('axios');
     //⚡Arquivar Conversa
 
     let baseUrl = properties.url;

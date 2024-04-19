@@ -1,4 +1,6 @@
 async function(properties, context) {
+
+let axios = require('axios');
     //▶️ Reiniciar API
     
     let baseUrl = properties.url;

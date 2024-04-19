@@ -1,4 +1,6 @@
 async function(properties, context) {
+
+let axios = require('axios');
     //▶️ Editar Agentes
     
     let baseUrl = properties.url;

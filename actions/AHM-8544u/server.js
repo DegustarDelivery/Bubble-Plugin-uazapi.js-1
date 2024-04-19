@@ -1,4 +1,6 @@
 async function(properties, context) {
+
+let axios = require('axios');
     //▶️ Grupo - Mudar imagem
     
     let baseUrl = properties.url;

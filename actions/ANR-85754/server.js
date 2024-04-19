@@ -1,4 +1,6 @@
 async function(properties, context) {
+
+let axios = require('axios');
     //▶️ Ver Info de MultiAtendimento
     
     let baseUrl = properties.url;

@@ -1,4 +1,6 @@
 async function(properties, context) {
+
+let axios = require('axios');
     //▶️ Instancia - Configurar Webhook
     
     let baseUrl = properties.url;

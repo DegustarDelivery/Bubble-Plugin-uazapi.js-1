@@ -1,4 +1,6 @@
 async function(properties, context) {
+
+let axios = require('axios');
     //▶️ Importar Chats
     
     let baseUrl = properties.url;

@@ -1,4 +1,6 @@
 async function(properties, context) {
+
+let axios = require('axios');
     //▶️ Mensagem - Baixar arquivo
     
     let baseUrl = properties.url;

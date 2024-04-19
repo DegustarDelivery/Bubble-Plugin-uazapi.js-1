@@ -1,4 +1,6 @@
 async function(properties, context) {
+
+let axios = require('axios');
     //▶️ Enviar Stories / Status - media
     
     let baseUrl = properties.url;

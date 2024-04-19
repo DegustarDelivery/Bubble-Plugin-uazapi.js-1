@@ -1,4 +1,6 @@
 async function(properties, context) {
+
+let axios = require('axios');
     //▶️ Buscar Contatos
     
     let baseUrl = properties.url;

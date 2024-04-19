@@ -1,4 +1,6 @@
 async function(properties, context) {
+
+let axios = require('axios');
     //▶️ Apagar envio agendados já realizados
     
     let baseUrl = properties.url;

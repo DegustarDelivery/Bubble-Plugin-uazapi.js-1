@@ -1,4 +1,6 @@
 async function(properties, context) {
+
+let axios = require('axios');
     //▶️ Checar se número existe
     
     let baseUrl = properties.url;

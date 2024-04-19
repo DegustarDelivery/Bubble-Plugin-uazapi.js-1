@@ -1,4 +1,6 @@
 async function(properties, context) {
+
+let axios = require('axios');
     //▶️ Configuração Geral dos Fluxos
     
     let baseUrl = properties.url;

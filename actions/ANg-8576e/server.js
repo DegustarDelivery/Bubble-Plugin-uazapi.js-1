@@ -1,4 +1,6 @@
 async function(properties, context) {
+
+let axios = require('axios');
     //▶️ Editar Envio Agendados
     
     let baseUrl = properties.url;

@@ -1,4 +1,6 @@
 async function(properties, context) {
+
+let axios = require('axios');
     //▶️ Grupo - tempo das mensagens
     
     let baseUrl = properties.url;

@@ -1,4 +1,6 @@
 async function(properties, context) {
+
+let axios = require('axios');
     //▶️ Mensagem - Marcar como lida
     
     let baseUrl = properties.url;
