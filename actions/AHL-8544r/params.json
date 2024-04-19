@@ -79,5 +79,6 @@
             "value": "custom_data_AIq"
         }
     },
-    "type": "server_side"
+    "type": "server_side",
+    "use_packages": true
 }

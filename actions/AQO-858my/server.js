@@ -1,4 +1,6 @@
 async function(properties, context) {
+
+let axios = require('axios');
     //▶️ Importar Chats
     
     let baseUrl = properties.url;
@@ -45,33 +47,37 @@ async function(properties, context) {
     let error_log;
 
     try {
-        response = await fetch(url, {
-            method: 'PUT',
+            response = await axios({
+            url: url,
+            method: 'put',
             headers: headers,
-            body: body.replace(/\n/g, '')
+            data: body.replace(/\n/g, '')
 
         });
 
-        if (!response.ok) {
+         if (response.status < 200 || response.status >= 300) {
             error = true;
-            const responseBody = await response.json();
+            
             return {
                 error: error,
-                error_log: JSON.stringify(responseBody, null, 2).replace(/"_p_/g, "\"")
+                error_log: JSON.stringify(response.data, null, 2).replace(/"_p_/g, "\"")
             };
         }
 
     } catch (e) {
         error = true;
         error_log = e.toString();
+        return {
+            error: error,
+            error_log: error_log
+        };
     }
-
-    const resultObj = await response.json();
+    
 
     return {
  
         error: error,
-        log: JSON.stringify(resultObj, null, 2).replace(/"_p_/g, "\""),
+        log: JSON.stringify(response.data, null, 2).replace(/"_p_/g, "\""),
         error_log: error_log
     };
 }

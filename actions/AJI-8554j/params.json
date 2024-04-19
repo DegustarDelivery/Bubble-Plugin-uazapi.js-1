@@ -95,5 +95,6 @@
             "value": "custom_data_ARB"
         }
     },
-    "type": "server_side"
+    "type": "server_side",
+    "use_packages": true
 }

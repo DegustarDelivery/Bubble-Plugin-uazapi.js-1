@@ -1,4 +1,6 @@
 async function(properties, context) {
+
+let axios = require('axios');
     //▶️ Instancia - Buscar todas
     
     let baseUrl = properties.url;
@@ -36,24 +38,25 @@ async function(properties, context) {
     let response;
     let error = false;
     let error_log;
-    let resultObj;
+    ;
 
     try {
-        response = await fetch(url, {
-            method: 'GET',
+            response = await axios({
+            url: url,
+            method: 'get',
             headers: headers
         });
 
-        if (!response.ok) {
+         if (response.status < 200 || response.status >= 300) {
             error = true;
-            const responseBody = await response.json();
+            
             return {
                 error: error,
-                error_log: JSON.stringify(responseBody, null, 2).replace(/"_p_/g, "\"")
+                error_log: JSON.stringify(response.data, null, 2).replace(/"_p_/g, "\"")
             };
         }
 
-        resultObj = await response.json();
+        
 
     } catch (e) {
         error = true;
@@ -65,9 +68,9 @@ async function(properties, context) {
     }
 
     return {
-        instancias: resultObj,
+        instancias: response.data,
         error: error,
-        log: JSON.stringify(resultObj, null, 2).replace(/"_p_/g, "\""),
+        log: JSON.stringify(response.data, null, 2).replace(/"_p_/g, "\""),
         error_log: error_log
     };
 }

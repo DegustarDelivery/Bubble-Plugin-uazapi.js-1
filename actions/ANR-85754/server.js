@@ -1,4 +1,6 @@
 async function(properties, context) {
+
+let axios = require('axios');
     //▶️ Ver Info de MultiAtendimento
     
     let baseUrl = properties.url;
@@ -36,33 +38,40 @@ async function(properties, context) {
         "apikey": apikey
     };
 
-    let response, resultObj;
+    let response, response.data;
     let error = false;
     let error_log;
 
     try {
-        response = await fetch(url, {
-            method: 'GET',
+            response = await axios({
+            url: url,
+            method: 'get',
             headers: headers
         });
-        resultObj = await response.json();
-    } catch(e) {
-        error = true;
-        error_log = e.toString();
-    }
+        
 
-    if (!response.ok) {
+
+     if (response.status < 200 || response.status >= 300) {
         error = true;
         return {
             error: error,
-            error_log: JSON.stringify(resultObj, null, 2).replace(/"_p_/g, "\""),
+            error_log: JSON.stringify(response.data, null, 2).replace(/"_p_/g, "\""),
         };
     }
 
+} catch (e) {
+    error = true;
+    error_log = e.toString();
     return {
-        ticketSystem: resultObj,
         error: error,
-        log: JSON.stringify(resultObj, null, 2).replace(/"_p_/g, "\""),
+        error_log: error_log
+    };
+}
+
+    return {
+        ticketSystem: response.data,
+        error: error,
+        log: JSON.stringify(response.data, null, 2).replace(/"_p_/g, "\""),
         error_log: error_log
     };
 }

@@ -1,4 +1,6 @@
 async function(properties, context) {
+
+let axios = require('axios');
     let baseUrl = properties.url;
     if (!baseUrl || baseUrl.trim() === "" || !baseUrl.includes("http")) {
         baseUrl = context.keys["Server URL"];
@@ -48,26 +50,27 @@ async function(properties, context) {
     let response;
     let error = false;
     let error_log;
-    let resultObj;
+    ;
 
     try {
-        response = await fetch(url, {
-            method: 'POST',
+            response = await axios({
+            url: url,
+            method: 'post',
             headers: headers,
-            body: JSON.stringify(raw)
+            data: raw
         });
 
-        if (!response.ok) {
+         if (response.status < 200 || response.status >= 300) {
             error = true;
-            const responseBody = await response.json();
+            
             return {
                 error: error,
                 status: response.status.toString(),
-                error_log: JSON.stringify(responseBody, null, 2).replace(/"_p_/g, "\"")
+                error_log: JSON.stringify(response.data, null, 2).replace(/"_p_/g, "\"")
             };
         }
 
-        resultObj = await response.json();
+        
     } catch (e) {
         error = true;
         error_log = e.toString();
@@ -77,13 +80,14 @@ async function(properties, context) {
         };
     }
 
+    
     return {
-        remoteJid: resultObj?.key?.remoteJid,
-        fromMe: resultObj?.key?.fromMe,
-        id: resultObj?.key?.id,
-        status: resultObj?.status,
+        remoteJid: response.data?.key?.remoteJid,
+        fromMe: response.data?.key?.fromMe,
+        id: response.data?.key?.id,
+        status: response.data?.status,
         error: error,
-        log: JSON.stringify(resultObj, null, 2).replace(/"_p_/g, "\""),
+        log: JSON.stringify(response.data, null, 2).replace(/"_p_/g, "\""),
         error_log: error_log,
     };
 }

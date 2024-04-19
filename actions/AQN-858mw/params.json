@@ -58,5 +58,6 @@
             "value": "custom_data_AQR"
         }
     },
-    "type": "server_side"
+    "type": "server_side",
+    "use_packages": true
 }

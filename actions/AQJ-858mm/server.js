@@ -1,4 +1,6 @@
 async function(properties, context) {
+
+let axios = require('axios');
     //▶️ Editar Config Geral XX
     
     let baseUrl = properties.url;
@@ -69,30 +71,37 @@ async function(properties, context) {
     let error_log;
 
     try {
-        response = await fetch(url, {
-            method: 'PUT',
+            response = await axios({
+            url: url,
+            method: 'put',
             headers: headers,
-            body: JSON.stringify(body)
+            data: body
         });
-    } catch(e) {
-        error = true;
-        error_log = e.toString();
-    }
 
-    if (!response.ok) {
+
+     if (response.status < 200 || response.status >= 300) {
         error = true;
-        const responseBody = await response.json();
+        
         return {
             error: error,
-            error_log: JSON.stringify(responseBody, null, 2).replace(/"_p_/g, "\"")
+            error_log: JSON.stringify(response.data, null, 2).replace(/"_p_/g, "\"")
         };
     } 
 
-    const resultObj = await response.json();
+} catch (e) {
+    error = true;
+    error_log = e.toString();
+    return {
+        error: error,
+        error_log: error_log
+    };
+}
+
+    
 
     return {
-        config: resultObj,
-        log: JSON.stringify(resultObj, null, 2).replace(/"_p_/g, "\""),
+        config: response.data,
+        log: JSON.stringify(response.data, null, 2).replace(/"_p_/g, "\""),
         error: error,
         error_log: error_log        
     };

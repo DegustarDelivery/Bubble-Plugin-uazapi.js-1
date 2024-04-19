@@ -67,5 +67,6 @@
             "value": "custom_data_AQW"
         }
     },
-    "type": "server_side"
+    "type": "server_side",
+    "use_packages": true
 }

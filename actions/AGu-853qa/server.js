@@ -1,4 +1,6 @@
 async function(properties, context) {
+
+let axios = require('axios');
     //▶️ Enviar texto
 
     let baseUrl = properties.url;
@@ -37,7 +39,7 @@ async function(properties, context) {
         "apikey": apikey
     };
 
-    const raw = {
+    const data = {
         "number": properties.number,
         "textMessage": {
             "text": properties.text
@@ -50,11 +52,11 @@ async function(properties, context) {
     };
 
     if (properties.mentions === true) {
-        raw.options.mentions = { "everyOne": true };
+        data.options.mentions = { "everyOne": true };
     }
 
     if (properties.quoted && properties.quoted.trim() !== "") {
-        raw.options.quoted = { key: { id: properties.quoted.trim() } };
+        data.options.quoted = { key: { id: properties.quoted.trim() } };
     }
 
     let response;
@@ -62,18 +64,19 @@ async function(properties, context) {
     let error_log;
 
     try {
-        response = await fetch(url, {
-            method: 'POST',
+    response = await axios({
+            method: 'post',
+            url: url,
             headers: headers,
-            body: JSON.stringify(raw)
+            data: data
         });
 
-        if (!response.ok) {
+         if (response.status < 200 || response.status >= 300) {
             error = true;
-            const responseBody = await response.json();
+            
             return {
                 error: error,
-                error_log: JSON.stringify(responseBody, null, 2).replace(/"_p_/g, "\"")
+                error_log: JSON.stringify(response.data, null, 2).replace(/"_p_/g, "\"")
             };
         }
 
@@ -88,19 +91,16 @@ async function(properties, context) {
     }
 
     // Verificar se a resposta não é nula antes de tentar ler o JSON
-    let resultObj;
-    if (response) {
-        resultObj = await response.json();
-    }
+    let 
 
-    // Verificar se resultObj não é nulo antes de acessar suas propriedades
+    // Verificar se response.data não é nulo antes de acessar suas propriedades
     return {
-        remoteJid: resultObj && resultObj.key ? resultObj.key.remoteJid : undefined,
-        fromMe: resultObj && resultObj.key ? resultObj.key.fromMe : undefined,
-        id: resultObj && resultObj.key ? resultObj.key.id : undefined,
-        status: resultObj && resultObj.status ? resultObj.status.toString() : undefined,
+        remoteJid: response.data && response.data.key ? response.data.key.remoteJid : undefined,
+        fromMe: response.data && response.data.key ? response.data.key.fromMe : undefined,
+        id: response.data && response.data.key ? response.data.key.id : undefined,
+        status: response.data && response.data.status ? response.data.status.toString() : undefined,
         error: error,
-        log: resultObj ? JSON.stringify(resultObj, null, 2).replace(/"_p_/g, "\"") : undefined,
+        log: response.data ? JSON.stringify(response.data, null, 2).replace(/"_p_/g, "\"") : undefined,
         error_log: error_log
     };
 }
