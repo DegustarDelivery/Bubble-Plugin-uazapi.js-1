@@ -53,48 +53,38 @@ send = "https:" + properties.image;
         }
     };
     
-    let retries = 3;
-    let attempt = 0;
     let response, resultObj;
+    let error = false;
+    let error_log;
 
-    while (attempt < retries) {
-        try {
-            response = await fetch(url, {
-                method: 'POST',
-                headers: headers,
-                body: JSON.stringify(raw)
-            });
-
-            resultObj = await response.json(); // Assume we always get JSON back
-            let isError = response.status >= 400;
-
-            return {
-                remoteJid: resultObj.key?.remoteJid,
-                fromMe: resultObj.key?.fromMe,
-                id: resultObj.key?.id,
-                status: resultObj.status?.toString(),
-                error: isError,
-                log: JSON.stringify(resultObj, null, 2).replace(/"_p_/g, "\""),
-                error_log: isError ? JSON.stringify(resultObj, null, 2).replace(/"_p_/g, "\"") : null
-            };
-            
-        } catch (e) {
-            console.log(`Error on attempt ${attempt + 1}: ${e.message}`);
-            if (attempt < retries - 1 && e.message.includes("fetch failed")) {
-                console.log("Retrying fetch...");
-                attempt++;
-                await new Promise(resolve => setTimeout(resolve, 1000 * (attempt + 1)));
-                continue;
-            }
-            return {
-                error: true,
-                error_log: `Error: ${e.message}`
-            };
-        }
+    try {
+        response = await fetch(url, {
+            method: 'POST',
+            headers: headers,
+            body: JSON.stringify(body)
+        });
+        resultObj = await response.json();
+    } catch(e) {
+        error = true;
+        error_log = e.toString();
     }
 
+    if (!response.ok) {
+        error = true;
+        return {
+            error: error,
+            error_log: JSON.stringify(resultObj, null, 2).replace(/"_p_/g, "\""),
+        };
+    } 
+
     return {
-        error: true,
-        error_log: "Failed after all retries."
+        remoteJid: resultObj?.key?.remoteJid,
+        fromMe: resultObj?.key?.fromMe,
+        id: resultObj?.key?.id,
+        status: resultObj?.status ? resultObj?.status.toString() : undefined,
+        error: error,
+        log: JSON.stringify(resultObj, null, 2).replace(/"_p_/g, "\""),
+        error_log: error_log,
     };
 }
+
